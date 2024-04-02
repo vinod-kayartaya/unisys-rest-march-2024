@@ -33,7 +33,7 @@ Welcome to the "REST API Training with JSON in C++ and C#" course! This comprehe
 
 ### Day 3: Consuming REST API in C++ with C++ REST SDK
 
-- Advanced topics in C++ REST API development with CPR (authentication, error handling, security)
+- Advanced topics in C++ REST API development with CrowCPP (authentication, error handling, etc)
 - Consuming RESTful services from a C++ application using CPR
 - Best practices and design patterns for C++ REST API development with CPR
 - Troubleshooting common issues in C++ REST development with CPR
