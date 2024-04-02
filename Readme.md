@@ -26,6 +26,10 @@ Welcome to the "REST API Training with JSON in C++ and C#" course! This comprehe
 - Testing REST API endpoints using tools like Postman
 - Handling JSON data with CrowCPP
 - Hands-on coding exercises and practical examples using CrowCPP
+- **C++ libraries required**
+  - [Crow CPP](https://github.com/CrowCpp/Crow/releases/download/v1.0%2B5/crow-v1.0+5.tar.gz)
+  - [Boost](https://boostorg.jfrog.io/artifactory/main/release/1.84.0/source/boost_1_84_0.zip)
+  - [Nlohmann JSON](https://github.com/nlohmann/json/releases/download/v3.11.3/include.zip)
 
 ### Day 3: Consuming REST API in C++ with C++ REST SDK
 
