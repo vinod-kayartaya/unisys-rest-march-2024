@@ -30,6 +30,24 @@ int main()
 			handler.handle_get_one(req, resp, id);
 		});
 
+	// http://localhost:18080/api/customers
+	CROW_ROUTE(app, "/api/customers").methods("POST"_method) // .methods(crow::HTTPMethod::Post)
+		([&handler](crow::request& req, crow::response& resp) {
+			handler.handle_post(req, resp);
+		});
+
+	// http://localhost:18080/api/customers/3
+	CROW_ROUTE(app, "/api/customers/<int>").methods(crow::HTTPMethod::Put)
+		([&handler](crow::request& req, crow::response& resp, int id) {
+			handler.handle_put(req, resp, id);
+		});
+
+	// http://localhost:18080/api/customers/3
+	CROW_ROUTE(app, "/api/customers/<int>").methods(crow::HTTPMethod::Patch)
+		([&handler](crow::request& req, crow::response& resp, int id) {
+			handler.handle_patch(req, resp, id);
+		});
+
 	app.port(18080).multithreaded().run();
 
 	cout << endl << "Hit RETURN to exit" << endl;

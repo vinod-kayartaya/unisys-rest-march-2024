@@ -21,18 +21,45 @@ json customers_to_json(vector<Customer> customers)
 	return customers_json;
 }
 
-void ok(crow::response& resp, json data)
+void json_resp(crow::response& resp, json data)
 {
-	resp.code = 200;
 	resp.set_header("Content-Type", "application/json");
 	resp.write(data.dump());
 	resp.end();
 }
 
-void not_found(crow::response& resp, json& data)
+void ok(crow::response& resp, json data)
+{
+	resp.code = 200;
+	json_resp(resp, data);
+}
+
+void not_found(crow::response& resp, json data)
 {
 	resp.code = 404;
-	resp.set_header("Content-Type", "application/json");
-	resp.write(data.dump());
-	resp.end();
+	json_resp(resp, data);
+}
+
+void created(crow::response& resp, json data)
+{
+	resp.code = 201;
+	json_resp(resp, data);
+}
+
+void bad_request(crow::response& resp, json data)
+{
+	resp.code = 400;
+	json_resp(resp, data);
+}
+
+Customer json_to_customer(json data)
+{
+	Customer c;
+	c.id = data.value("id", 0);
+	c.name = data.value("name", "");
+	c.city = data.value("city", "");
+	c.email = data.value("email", "");
+	c.phone = data.value("phone", "");
+
+	return c;
 }
