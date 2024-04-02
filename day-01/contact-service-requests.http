@@ -1,0 +1,91 @@
+@base_url = http://13.210.249.205:8080
+
+### Request to get all contacts in XML format
+### First line in this is called `request line`, 3 parts (method, path, [http version])
+### Followed by headers in key:value format
+
+GET {{base_url}}/api/contacts HTTP/1.1
+Accept: application/xml
+
+###
+GET {{base_url}}/api/contacts
+Accept: application/json
+
+###
+GET {{base_url}}/api/contacts/72725fbe-9ff4-424f-bcd6-5850af0f498b
+Accept: application/json
+
+###
+GET {{base_url}}/api/contacts/72725fbe-9ff4-424f-bcd6-5850af0f498b
+Accept: text/plain
+###
+GET {{base_url}}/api/contacts/72725fbe-9ff4-424f-bcd6-5850af0f498b
+Accept: application/xml
+
+###
+GET {{base_url}}/api/contacts/72725fbe-9ff4-424f-bcd6-5850af0f498b
+Accept: text/csv
+
+###
+GET {{base_url}}/api/contacts/72725fbe-9ff4-424f-bcd6-5850af0f498c
+Accept: application/json
+
+###
+
+get {{base_url}}/api/contacts?city=Pensacola
+Accept: application/json
+###
+
+get {{base_url}}/api/contacts?state=Florida
+Accept: application/json
+
+###
+
+POST {{base_url}}/api/contacts
+Content-Type: application/json
+Accept: application/json
+
+{
+    "firstname": "Vinod",
+    "email": "vinod@vinod.co",
+    "phone": "9731424784"
+}
+
+###
+
+PATCH {{base_url}}/api/contacts/e34fbd14-c3e9-4ebf-b2f3-5f02b2cce910
+Content-Type: application/json
+Accept: application/json
+
+{
+    "city": "Bangalore",
+    "state": "Karnataka"   
+}
+###
+
+GET {{base_url}}/api/contacts/e34fbd14-c3e9-4ebf-b2f3-5f02b2cce910
+Accept: application/json
+
+###
+
+PUT {{base_url}}/api/contacts/e34fbd14-c3e9-4ebf-b2f3-5f02b2cce910
+Content-Type: application/json
+Accept: application/json
+
+{
+  "firstname": "Vinod",
+  "lastname": "Kayartaya",
+  "gender": "Male",
+  "email": "vinod@knowledgeworksindia.com",
+  "phone": "9731424784",
+  "address": "1st cross 1st main ISRO lyt",
+  "city": "Bangalore",
+  "state": "Karnataka",
+  "country": "India",
+  "pincode": "560078",
+  "picture": "https://reactjs-movie-browser.web.app/images/vinod.jpg"
+}
+
+###
+DELETE  {{base_url}}/api/contacts/e34fbd14-c3e9-4ebf-b2f3-5f02b2cce910
+Accept: application/json

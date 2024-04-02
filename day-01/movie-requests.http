@@ -1,0 +1,4 @@
+@base_url = https://www.omdbapi.com/?apikey=aa9e49f
+
+GET {{base_url}}&s=avengers
+Accept: application/json

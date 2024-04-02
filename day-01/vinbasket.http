@@ -1,0 +1,57 @@
+@host=13.210.249.205:8888
+
+###
+
+GET /products
+Host: {{host}}
+Accept: application/json
+
+###
+
+GET /products?_page=2
+Host: {{host}}
+Accept: application/json
+
+###
+
+GET /products?_limit=15&_page=3
+Host: {{host}}
+Accept: application/json
+
+###
+
+GET /categories
+Host: {{host}}
+Accept: application/xml
+
+###
+
+GET /brands
+Host: {{host}}
+
+### order NOT placed by this user (identified by the token)
+GET /orders/1
+Host: {{host}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6IlJhbWVzaCBLdW1hciIsImlhdCI6MTcxMTcwNTc3MX0.JcuO8Ei1tLuNbwfehuU2COHC8Qour2_k8asYiB0mk6U
+
+### all orders by the user (encoded in the JWT)
+GET /orders
+Host: {{host}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6IlJhbWVzaCBLdW1hciIsImlhdCI6MTcxMTcwNTc3MX0.JcuO8Ei1tLuNbwfehuU2COHC8Qour2_k8asYiB0mk6U
+
+### a valid order placed by the user identifiable in the JWT
+GET /orders/5
+Host: {{host}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywibmFtZSI6IlJhbWVzaCBLdW1hciIsImlhdCI6MTcxMTcwNTc3MX0.JcuO8Ei1tLuNbwfehuU2COHC8Qour2_k8asYiB0mk6U
+
+
+###
+
+POST /login
+Host: {{host}}
+Content-Type: application/json
+
+{
+    "email": "ramesh@example.com",
+    "password": "123123123"
+}
