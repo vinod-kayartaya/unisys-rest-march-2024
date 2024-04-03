@@ -14,3 +14,4 @@ void ok(crow::response& resp, json data);
 void not_found(crow::response& resp, json data);
 void created(crow::response& resp, json data);
 void bad_request(crow::response& resp, json data);
+void not_acceptable(crow::response& resp);

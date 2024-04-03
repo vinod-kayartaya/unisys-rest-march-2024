@@ -84,3 +84,15 @@ void CustomerService::update_customer(Customer customer)
 
 	*it = customer;
 }
+
+Customer CustomerService::delete_customer(int id)
+{
+	auto it = find_if(customers.begin(), customers.end(), [id](const Customer& c) { return c.id == id; });
+	if (it == customers.end()) {
+		throw invalid_argument("no customer found for the given id");
+	}
+
+	Customer deleted_customer = *it;
+	customers.erase(it);
+	return deleted_customer;
+}

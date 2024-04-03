@@ -27,4 +27,5 @@ public:
 	Customer get_customer_by_id(int id);
 	Customer add_new_customer(Customer customer);
 	void update_customer(Customer customer);
+	Customer delete_customer(int id);
 };

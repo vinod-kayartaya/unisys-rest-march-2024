@@ -52,6 +52,12 @@ void bad_request(crow::response& resp, json data)
 	json_resp(resp, data);
 }
 
+void not_acceptable(crow::response& resp)
+{
+	resp.code = 406;
+	json_resp(resp, { {"message", "we work only with application/json"} });
+}
+
 Customer json_to_customer(json data)
 {
 	Customer c;

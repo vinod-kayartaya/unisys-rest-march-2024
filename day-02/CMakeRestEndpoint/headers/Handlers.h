@@ -17,4 +17,5 @@ public:
 	void handle_post(crow::request& req, crow::response& resp);
 	void handle_put(crow::request& req, crow::response& resp, int id);
 	void handle_patch(crow::request& req, crow::response& resp, int id);
+	void handle_delete(crow::request& req, crow::response& resp, int id);
 };

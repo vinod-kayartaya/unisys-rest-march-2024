@@ -132,3 +132,16 @@ void Handler::handle_patch(crow::request& req, crow::response& resp, int id)
 		bad_request(resp, { {"message", e.what()} });
 	}
 }
+
+void Handler::handle_delete(crow::request& req, crow::response& resp, int id)
+{
+	try
+	{
+		auto deleted_customer = service.delete_customer(id);
+		ok(resp, customer_to_json(deleted_customer));
+	}
+	catch(const exception & e)
+	{
+		not_found(resp, { {"message", e.what()} });
+	}
+}
