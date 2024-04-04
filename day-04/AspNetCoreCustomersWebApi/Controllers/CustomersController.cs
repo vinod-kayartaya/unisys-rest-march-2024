@@ -2,6 +2,7 @@
 using AspNetCoreCustomersWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AspNetCoreCustomersWebApi.Controllers
 {
@@ -59,6 +60,34 @@ namespace AspNetCoreCustomersWebApi.Controllers
             {
                 _service.UpdateCustomer(customer);
                 return Ok(customer);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+        [HttpPatch("{id}")]
+        public IActionResult HandlePatch(Guid id, Customer customer)
+        {
+            // check if the customer for the given id exists; if not return NotFound()
+            var existingCustomer = _service.GetCustomerById(id);
+            if (existingCustomer == null)
+            {
+                return NotFound("no customer found for the given id");
+            }
+
+            existingCustomer.Name = customer.Name.IsNullOrEmpty() ? existingCustomer.Name : customer.Name;
+            existingCustomer.Email = customer.Email.IsNullOrEmpty() ? existingCustomer.Email : customer.Email;
+            existingCustomer.Phone = customer.Phone.IsNullOrEmpty() ? existingCustomer.Phone : customer.Phone;
+            existingCustomer.City = customer.City.IsNullOrEmpty() ? existingCustomer.City : customer.City;
+
+            try
+            {
+                _service.UpdateCustomer(existingCustomer);
+                return Ok(existingCustomer);
             }
             catch (Exception ex)
             {
