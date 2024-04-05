@@ -1,8 +1,11 @@
-﻿using AspNetCoreCustomersWebApi.Models;
+﻿using AspNetCoreCustomersWebApi.DTO;
+using AspNetCoreCustomersWebApi.Models;
 using AspNetCoreCustomersWebApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
 
 namespace AspNetCoreCustomersWebApi.Controllers
 {
@@ -38,10 +41,11 @@ namespace AspNetCoreCustomersWebApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult HandlePost(Customer customer)
+        public IActionResult HandlePost(CustomerDTO customer)
         {
             try
             {
+                customer.Id = Guid.NewGuid();
                 _service.AddCustomer(customer);
                 return CreatedAtAction(nameof(HandleGetOne), new { id = customer.Id }, customer);
             }
@@ -52,7 +56,7 @@ namespace AspNetCoreCustomersWebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult HandlePut(Guid id, Customer customer)
+        public IActionResult HandlePut(Guid id, CustomerDTO customer)
         {
             customer.Id = id;
 
@@ -70,7 +74,7 @@ namespace AspNetCoreCustomersWebApi.Controllers
 
 
         [HttpPatch("{id}")]
-        public IActionResult HandlePatch(Guid id, Customer customer)
+        public IActionResult HandlePatch(Guid id, CustomerDTO customer)
         {
             // check if the customer for the given id exists; if not return NotFound()
             var existingCustomer = _service.GetCustomerById(id);
@@ -103,6 +107,49 @@ namespace AspNetCoreCustomersWebApi.Controllers
             {
                 var deletedCustomer = _service.DeleteCustomer(id);
                 return Ok(deletedCustomer);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}/picture")]
+        public async Task<IActionResult> HandlePutPicture(Guid id)
+        {
+            CustomerDTO existingCustomer = _service.GetCustomerById(id);
+            if (existingCustomer == null)
+            {
+                return NotFound("no customer data found for id: " + id);
+            }
+
+            // read the binary data (image) from the request body
+            using(var memoryStream = new MemoryStream())
+            {
+                await Request.Body.CopyToAsync(memoryStream);
+                try
+                {
+                    _service.UpdateCustomerPicture(id, memoryStream.ToArray());
+                    return Ok("customer picture uploaded successfully");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            } // memoryStream is closed here automatically
+        }
+
+        [HttpGet("{id}/picture")]
+        public IActionResult GetCustomerPicture(Guid id)
+        {
+            try
+            {
+                var picture = _service.GetCustomerPicture(id);
+                if(picture== null)
+                {
+                    return NotFound("this customer does not have a picture");
+                }
+                return File(_service.GetCustomerPicture(id), "image/jpeg");
             }
             catch (Exception ex)
             {

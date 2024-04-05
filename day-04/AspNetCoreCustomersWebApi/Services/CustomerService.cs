@@ -1,29 +1,35 @@
 ﻿using AspNetCoreCustomersWebApi.Data;
+using AspNetCoreCustomersWebApi.DTO;
 using AspNetCoreCustomersWebApi.Models;
 
 namespace AspNetCoreCustomersWebApi.Services
 {
     public class CustomerService
     {
-        private readonly IList<Customer> _customers;
         private readonly AppDbContext _context;
 
         public CustomerService(AppDbContext context) { 
-            _customers = new List<Customer>();
             _context = context;
         }
    
-        public IEnumerable<Customer> GetAllCustomers()
+        public IEnumerable<CustomerDTO> GetAllCustomers()
         {
-            return _context.Customers.ToList();
+            return _context.Customers
+                .ToList() // list of Customer (model) objects
+                .Select(customer => CustomerDTO.FromCustomer(customer)); // list of CustomerDTO objects
         }
 
-        public Customer GetCustomerById(Guid id)
+        public CustomerDTO GetCustomerById(Guid id)
         {
-            return _context.Customers.FirstOrDefault(c => c.Id == id);
+            Customer customer = _context.Customers.FirstOrDefault(c => c.Id == id);
+            if(customer == null)
+            {
+                return null;
+            }
+            return CustomerDTO.FromCustomer(customer);
         }
 
-        public void AddCustomer(Customer customer)
+        public void AddCustomer(CustomerDTO customer)
         {
             if(string.IsNullOrWhiteSpace(customer.Name) ||
                 string.IsNullOrWhiteSpace(customer.Email) ||
@@ -42,11 +48,11 @@ namespace AspNetCoreCustomersWebApi.Services
             }
 
             // if all is well
-            _context.Customers.Add(customer);
+            _context.Customers.Add(CustomerDTO.FromCustomerDTO(customer));
             _context.SaveChanges();
         }
 
-        public void UpdateCustomer(Customer customer)
+        public void UpdateCustomer(CustomerDTO customer)
         {
             if (string.IsNullOrWhiteSpace(customer.Name) ||
                 string.IsNullOrWhiteSpace(customer.Email) ||
@@ -75,7 +81,7 @@ namespace AspNetCoreCustomersWebApi.Services
             _context.SaveChanges(); // any changes to any of the objects managed by the dbcontext will be saved to the db
         }
 
-        public Customer DeleteCustomer(Guid customerId) {
+        public CustomerDTO DeleteCustomer(Guid customerId) {
             var existingCustomerData = _context.Customers.FirstOrDefault(c => c.Id == customerId);
             if (existingCustomerData == null)
             {
@@ -84,7 +90,29 @@ namespace AspNetCoreCustomersWebApi.Services
 
             _context.Customers.Remove(existingCustomerData);
             _context.SaveChanges();
-            return existingCustomerData;
+            return CustomerDTO.FromCustomer(existingCustomerData);
+        }
+
+        public void UpdateCustomerPicture(Guid customerId, byte[] picture)
+        {
+            var existingCustomerData = _context.Customers.FirstOrDefault(c => c.Id == customerId);
+            if (existingCustomerData == null)
+            {
+                throw new ArgumentException("no customer data found for the given id");
+            }
+
+            existingCustomerData.Picture = picture;
+            _context.SaveChanges();
+        }
+
+        public byte[] GetCustomerPicture(Guid id)
+        {
+            var existingCustomerData = _context.Customers.FirstOrDefault(c => c.Id == id);
+            if (existingCustomerData == null)
+            {
+                throw new ArgumentException($"no customer data found for the given id {id}");
+            }
+            return existingCustomerData.Picture;
         }
     }
 }
